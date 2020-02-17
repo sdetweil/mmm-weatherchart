@@ -18,18 +18,24 @@ module.exports = NodeHelper.create({
 				host: payload.domain,
 				path: payload.path
 			};
+			var newImage =null
+			var pngFiles = payload.mmDir + 'modules/mmm-weatherchart/cache/*.png';
+			del.sync([pngFiles]);			
 			http.get(options, function (response) {
-				var pngFiles = payload.mmDir + 'modules/mmm-weatherchart/cache/*.png';
-				del([pngFiles]);
-				var cachedFile = 'modules/mmm-weatherchart/cache/map-' + new Date().getTime() + '.png';
-				var newImage = fs.createWriteStream(payload.mmDir + cachedFile);
-				response.on('data', function(chunk){
-					newImage.write(chunk);
+				if(response.statusCode == 200){
+					console.log("received good status")
+					var cachedFile = 'modules/mmm-weatherchart/cache/map-' + new Date().getTime() + '.png';
+					let np =payload.mmDir + cachedFile;
+					console.log("writing to "+np);
+					newImage = fs.createWriteStream(np);				
+					response.on('data', function(chunk){
+						newImage.write(chunk);
+					});
+					response.on('end', function(){
+						newImage.end();
+						self.sendSocketNotification("MAPPED", cachedFile);
 				});
-				response.on('end', function(){
-					newImage.end();
-					self.sendSocketNotification("MAPPED", cachedFile);
-				});
+				}
 			});
 		}
 	},

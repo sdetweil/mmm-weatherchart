@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/paphko/mmm-weatherchart#readme",
   "dependencies": {
-    "del": "latest",
+    "del": "^5.1.0",
     "request": "latest"
   }
 }
