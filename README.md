@@ -14,6 +14,8 @@ cd ~/MagicMirror/modules
 Clone this repository:
 ````
 git clone https://github.com/paphko/mmm-weatherchart.git
+cd mmm-weatherchart
+npm install
 ````
 
 Configure the module in your `config.js` file.
